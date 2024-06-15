@@ -6,11 +6,19 @@ import { useNavigate } from "react-router-dom";
 function CreateAlbum() {
   const albums = useAlbums();
   const navigate = useNavigate();
+  const getHighestId = () => {
+    let highestId = 0;
+    albums.forEach((album) => {
+      if (album.id > highestId) {
+        highestId = album.id;
+      }
+    });
+    return highestId;
+  }
   const handleSubmit = (data) => {
     // get latest album id
-    const id = albums[albums.length - 1].id + 1;
+    const id = getHighestId() + 1;
     data.id = id;
-    console.log(data);
     const request = fetch(`${process.env.REACT_APP_API_URL}/album`, {
       method: "POST",
       body: JSON.stringify(data),
